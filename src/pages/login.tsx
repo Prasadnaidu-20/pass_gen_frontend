@@ -20,50 +20,58 @@ export default function Login() {
       setMessage(res.data.message);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
-      router.push("/vault"); 
+      router.push("/vault");
     } catch (err: unknown) {
-  const error = err as AxiosError<{ message: string }>;
-  setMessage(error.response?.data?.message || "Login failed");
-}
+      const error = err as AxiosError<{ message: string }>;
+      setMessage(error.response?.data?.message || "Login failed");
+    }
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "80px auto", textAlign: "center" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ display: "block", margin: "10px auto", padding: "8px", width: "100%" }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ display: "block", margin: "10px auto", padding: "8px", width: "100%" }}
-        />
-        <button
-          type="submit"
-          style={{
-            marginTop: "10px",
-            padding: "10px 20px",
-            backgroundColor: "#0070f3",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Login
-        </button>
-        <Link href="/register"> Register here</Link>
-      </form>
-      <p style={{ marginTop: "15px" }}>{message}</p>
+    <div className="min-h-screen bg-black text-gray-300 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <h2 className="text-2xl mb-6 text-white text-center">Login</h2>
+        
+        <form onSubmit={handleLogin} className="space-y-2">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full p-2 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-neutral-700"
+          />
+          
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full p-2 bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-neutral-700"
+          />
+          
+          <button
+            type="submit"
+            className="w-full p-2 bg-white text-black hover:bg-gray-200 cursor-pointer"
+          >
+            Login
+          </button>
+        </form>
+
+        <div className="mt-4 text-center">
+          <Link 
+            href="/register" 
+            className="text-sm text-gray-400 hover:text-white cursor-pointer"
+          >
+            Register here
+          </Link>
+        </div>
+
+        {message && (
+          <p className="mt-4 text-xs text-center text-gray-500">{message}</p>
+        )}
+      </div>
     </div>
   );
 }
