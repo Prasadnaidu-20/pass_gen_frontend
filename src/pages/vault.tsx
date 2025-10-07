@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import CryptoJS from "crypto-js";
 
@@ -57,24 +57,25 @@ export default function Vault() {
     setForm({ ...form, password: pwd });
   };
 
-  const fetchVault = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/vault`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const decryptedData = res.data.map((item: VaultItem) => ({
-        ...item,
-        password: decrypt(item.password),
-      }));
-      setVaultItems(decryptedData);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
+  const fetchVault = useCallback(async () => {
+  if (!token) return;
+  try {
+    const res = await axios.get(`${API_URL}/api/vault`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const decryptedData = res.data.map((item: VaultItem) => ({
+      ...item,
+      password: decrypt(item.password),
+    }));
+    setVaultItems(decryptedData);
+  } catch (err) {
+    console.error("Fetch error:", err);
+  }
+}, [token, API_URL,decrypt]);
 
   useEffect(() => {
-    if (token) fetchVault();
-  }, [token]);
+  fetchVault();
+}, [fetchVault]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });

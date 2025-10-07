@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
 export default function Register() {
@@ -19,9 +19,10 @@ export default function Register() {
       });
       setMessage(res.data.message);
       router.push("/login");
-    } catch (err: any) {
-      setMessage(err.response?.data?.message || "Registration failed ❌");
-    }
+    } catch (err: unknown) {
+  const error = err as AxiosError<{ message: string }>;
+  setMessage(error.response?.data?.message || "Registration failed ❌");
+}
   };
 
   return (

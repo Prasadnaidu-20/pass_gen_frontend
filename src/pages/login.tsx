@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { AxiosError } from "axios";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,9 +21,10 @@ export default function Login() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
       router.push("/vault"); 
-    } catch (err: any) {
-      setMessage(err.response?.data?.message || "Login failed");
-    }
+    } catch (err: unknown) {
+  const error = err as AxiosError<{ message: string }>;
+  setMessage(error.response?.data?.message || "Login failed");
+}
   };
 
   return (
@@ -58,7 +61,7 @@ export default function Login() {
         >
           Login
         </button>
-        <a href="/register">Register here</a>
+        <Link href="/register"> Register here</Link>
       </form>
       <p style={{ marginTop: "15px" }}>{message}</p>
     </div>
