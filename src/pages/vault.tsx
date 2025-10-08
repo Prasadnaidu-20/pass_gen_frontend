@@ -75,7 +75,7 @@ export default function Vault() {
 
   useEffect(() => {
   fetchVault();
-}, [fetchVault]);
+}, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
